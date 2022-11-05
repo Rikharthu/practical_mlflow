@@ -1,0 +1,19 @@
+name: dl-model-chapter06
+conda_env: conda.yaml
+
+entry_points:
+  main:
+    parameters:
+      pipeline_steps: { type: str, default: all }
+    command: "python main.py --pipeline_steps {pipeline_steps}"
+
+  download_data:
+    parameters:
+      download_url:
+        { type: str, default: https://pl-flash-data.s3.amazonaws.com/imdb.zip }
+      local_folder: { type: str, default: ./data }
+      pipeline_run_name: { type: str, default: chapter06 }
+    command:
+      "python pipeline/download_data.py --download_url {download_url} --local_folder {local_folder} \
+      --pipeline_run_name {pipeline_run_name}"
+
