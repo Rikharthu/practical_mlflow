@@ -1,0 +1,11 @@
+num_classes: 2
+labels: null
+backbone: prajjwal1/bert-tiny
+max_length: 128
+loss_fn: null
+optimizer: Adam
+lr_scheduler: null
+metrics: null
+learning_rate: null
+multi_label: false
+enable_ort: false
