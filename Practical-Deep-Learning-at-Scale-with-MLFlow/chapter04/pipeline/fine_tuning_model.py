@@ -23,17 +23,18 @@ def task(foundation_model, fine_tuning_strategy, data_path):
         target_fields="sentiment",
         train_file=f"{data_path}/imdb/train.csv",
         val_file=f"{data_path}/imdb/valid.csv",
-        test_file=f"{data_path}/imdb/test.csv"
+        test_file=f"{data_path}/imdb/test.csv",
+        batch_size=8
     )
 
     classifier_model = TextClassifier(backbone=foundation_model,
-                                      num_classes=datamodule.num_classes, metrics=torchmetrics.F1(datamodule.num_classes))
+                                      num_classes=datamodule.num_classes, metrics=torchmetrics.F1Score(datamodule.num_classes))
     trainer = flash.Trainer(max_epochs=3, gpus=torch.cuda.device_count())
 
     mlflow.pytorch.autolog()
     with mlflow.start_run(run_name="chapter04") as dl_model_tracking_run:
         trainer.finetune(classifier_model, datamodule=datamodule, strategy=fine_tuning_strategy)
-        trainer.test()
+        trainer.test(datamodule=datamodule)
 
         # mlflow log additional hyper-parameters used in this training
         mlflow.log_params(classifier_model.hparams)

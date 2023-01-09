@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/richardkuodis/Documents/Development/practical_mlflow/Practical-Deep-Learning-at-Scale-with-MLFlow/chapter05/mlruns/1/94d60e25c03d4694b914cded9427777c/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '1'
+lifecycle_stage: active
+run_id: 94d60e25c03d4694b914cded9427777c
+run_name: auspicious-lynx-305
+run_uuid: 94d60e25c03d4694b914cded9427777c
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1667765028539
+status: 1
+tags: []
+user_id: richardkuodis

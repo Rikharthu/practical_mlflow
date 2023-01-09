@@ -1,5 +1,6 @@
-name: dl_model_chapter04
+name: dl_model_chapter04_3
 conda_env: conda.yaml
+#python_env: files/config/python_env.yaml
 
 entry_points:
   main:

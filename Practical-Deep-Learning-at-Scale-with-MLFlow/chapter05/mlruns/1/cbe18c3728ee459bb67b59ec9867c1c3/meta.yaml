@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/richardkuodis/Documents/Development/practical_mlflow/Practical-Deep-Learning-at-Scale-with-MLFlow/chapter05/mlruns/1/cbe18c3728ee459bb67b59ec9867c1c3/artifacts
+end_time: 1667765428858
+entry_point_name: ''
+experiment_id: '1'
+lifecycle_stage: active
+name: ''
+run_id: cbe18c3728ee459bb67b59ec9867c1c3
+run_uuid: cbe18c3728ee459bb67b59ec9867c1c3
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1667765417075
+status: 3
+tags: []
+user_id: richardkuodis

@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/richardkuodis/Documents/Development/practical_mlflow/Practical-Deep-Learning-at-Scale-with-MLFlow/chapter05/mlruns/1/e36456e0ec8d44b48f243a5df2cb740b/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '1'
+lifecycle_stage: active
+run_id: e36456e0ec8d44b48f243a5df2cb740b
+run_name: suave-seal-750
+run_uuid: e36456e0ec8d44b48f243a5df2cb740b
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1673110462982
+status: 1
+tags: []
+user_id: richardkuodis

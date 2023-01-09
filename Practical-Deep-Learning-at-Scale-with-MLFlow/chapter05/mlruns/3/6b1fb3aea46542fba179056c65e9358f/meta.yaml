@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/richardkuodis/Documents/Development/practical_mlflow/Practical-Deep-Learning-at-Scale-with-MLFlow/chapter05/mlruns/3/6b1fb3aea46542fba179056c65e9358f/artifacts
+end_time: 1667765389784
+entry_point_name: ''
+experiment_id: '3'
+lifecycle_stage: active
+run_id: 6b1fb3aea46542fba179056c65e9358f
+run_name: adaptable-grouse-580
+run_uuid: 6b1fb3aea46542fba179056c65e9358f
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1667765387975
+status: 4
+tags: []
+user_id: richardkuodis

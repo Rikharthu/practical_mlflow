@@ -17,14 +17,13 @@ _steps = [
 @click.command()
 @click.option("--steps", default="all", type=str)
 def run_pipeline(steps):
-
     # Setup the mlflow experiment and AWS access
     os.environ["MLFLOW_TRACKING_URI"] = "http://localhost"
     os.environ["MLFLOW_S3_ENDPOINT_URL"] = "http://localhost:9000"
     os.environ["AWS_ACCESS_KEY_ID"] = "minio"
     os.environ["AWS_SECRET_ACCESS_KEY"] = "minio123"
 
-    EXPERIMENT_NAME = "dl_model_chapter04"
+    EXPERIMENT_NAME = "dl_model_chapter04_4"
     mlflow.set_experiment(EXPERIMENT_NAME)
     experiment = mlflow.get_experiment_by_name(EXPERIMENT_NAME)
     logger.info("pipeline experiment_id: %s", experiment.experiment_id)
@@ -35,6 +34,7 @@ def run_pipeline(steps):
 
     with mlflow.start_run(run_name='pipeline', nested=True) as active_run:
         if "download_data" in active_steps:
+            print("Downloading data")
             download_run = mlflow.run(".", "download_data", parameters={})
             download_run = mlflow.tracking.MlflowClient().get_run(download_run.run_id)
             file_path_uri = download_run.data.params['local_folder']
@@ -42,6 +42,7 @@ def run_pipeline(steps):
             logger.info(download_run)
 
         if "fine_tuning_model" in active_steps:
+            # Use params retrieved from previous step
             fine_tuning_run = mlflow.run(".", "fine_tuning_model", parameters={"data_path": file_path_uri})
             fine_tuning_run_id = fine_tuning_run.run_id
             fine_tuning_run = mlflow.tracking.MlflowClient().get_run(fine_tuning_run_id)

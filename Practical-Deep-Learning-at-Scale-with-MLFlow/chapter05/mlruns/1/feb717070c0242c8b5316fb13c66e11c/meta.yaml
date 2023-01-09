@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/richardkuodis/Documents/Development/practical_mlflow/Practical-Deep-Learning-at-Scale-with-MLFlow/chapter05/mlruns/1/feb717070c0242c8b5316fb13c66e11c/artifacts
+end_time: 1667765351885
+entry_point_name: ''
+experiment_id: '1'
+lifecycle_stage: active
+run_id: feb717070c0242c8b5316fb13c66e11c
+run_name: peaceful-ox-740
+run_uuid: feb717070c0242c8b5316fb13c66e11c
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1667765349690
+status: 4
+tags: []
+user_id: richardkuodis

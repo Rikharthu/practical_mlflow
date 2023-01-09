@@ -1,0 +1,31 @@
+channels:
+- conda-forge
+dependencies:
+- python=3.9.13
+- pip<=22.3
+- pip:
+  - mlflow<3,>=2.1
+  - albumentations==1.3.0
+  - cloudpickle==2.2.0
+  - colorama==0.4.6
+  - cryptography==38.0.3
+  - datasets==2.6.1
+  - defusedxml==0.7.1
+  - fiftyone==0.18.0
+  - graphviz==0.20.1
+  - ipython==8.6.0
+  - jsonschema==4.17.0
+  - lightning-bolts==0.6.0.post1
+  - lightning-flash==0.8.1
+  - lightning-lite==1.8.0.post1
+  - omegaconf==2.2.3
+  - pydot==1.4.2
+  - pystiche==1.0.1
+  - requests-toolbelt==0.9.1
+  - rich==12.6.0
+  - segmentation-models-pytorch==0.3.0
+  - sentence-transformers==2.2.2
+  - tensorflow-macos==2.10.0
+  - torch==1.13.0
+  - tornado==6.2
+name: mlflow-env

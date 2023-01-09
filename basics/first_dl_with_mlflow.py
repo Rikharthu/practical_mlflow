@@ -4,6 +4,10 @@ from flash.core.data.utils import download_data
 from flash.text import TextClassificationData, TextClassifier
 import mlflow
 
+# %%
+# Set this if running non-locally
+mlflow.set_tracking_uri('http://localhost')
+
 EXPERIMENT_NAME = "dl_model_chapter02"
 mlflow.set_experiment(EXPERIMENT_NAME)
 
@@ -15,6 +19,7 @@ mlflow.pytorch.autolog()
 experiment = mlflow.get_experiment_by_name(EXPERIMENT_NAME)
 print("experiment_id:", experiment.experiment_id)
 
+# %%
 download_data("https://pl-flash-data.s3.amazonaws.com/imdb.zip", "./data/")
 
 datamodule = TextClassificationData.from_csv(
@@ -26,6 +31,7 @@ datamodule = TextClassificationData.from_csv(
     batch_size=32
 )
 
+# %%
 gpu_count = torch.cuda.device_count()
 print(f"Number of GPU devices: {gpu_count}")
 
@@ -37,6 +43,7 @@ with mlflow.start_run(experiment_id=experiment.experiment_id, run_name="chapter0
     trainer.finetune(classifier_model, datamodule=datamodule, strategy="freeze")
     trainer.test(datamodule=datamodule)
 
+# %% Predictions
 print('Get prediction outputs for two sample sentences')
 predict_module = TextClassificationData.from_lists(
     predict_data=[

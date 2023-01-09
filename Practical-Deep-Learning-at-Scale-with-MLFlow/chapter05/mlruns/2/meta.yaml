@@ -1,0 +1,4 @@
+artifact_location: file:///Users/richardkuodis/Documents/Development/practical_mlflow/Practical-Deep-Learning-at-Scale-with-MLFlow/chapter05/mlruns/2
+experiment_id: '2'
+lifecycle_stage: active
+name: /Shared/dl_model_chapter05
