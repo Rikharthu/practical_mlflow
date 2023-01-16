@@ -1,6 +1,7 @@
 import mlflow
 from pyspark.sql import SparkSession
 from pyspark.sql.types import StringType
+import pandas as pd
 
 spark = SparkSession.builder.appName("Batch inference with MLflow DL inference pipeline").getOrCreate()
 
@@ -9,16 +10,24 @@ spark = SparkSession.builder.appName("Batch inference with MLflow DL inference p
 # or load a registered model with a version number
 #  model_uri=f"models:/{model_name}/{model_version}"
 
-logged_model = 'models:/inference_pipeline_model/6'
+model_name = "inference_pipeline_model"
+model_version = 1
+logged_model = f'models:/{model_name}/{model_version}'
 
 # Load model as a Spark UDF.
-loaded_model = mlflow.pyfunc.spark_udf(spark, model_uri=logged_model, result_type=StringType())
+print(f"Loading model {logged_model}")
+loaded_model = mlflow.pyfunc.spark_udf(
+    spark,
+    model_uri=logged_model,
+    result_type=StringType()
+)
+print("Finished loading model as Spark UDF")
 
 # pyfunc_udf = mlflow.pyfunc.spark_udf(<path-to-model-with-signature>)
 # df = spark_df.withColumn("prediction", pyfunc_udf())
 
 # Predict on a Spark DataFrame.
-df = spark.read.csv('../data/imdb/test.csv', header=True)
+df: pd.DataFrame = spark.read.csv('../data/imdb/test.csv', header=True)
 df = df.select('review').withColumnRenamed('review', 'text')
 df = df.withColumn('predictions', loaded_model())
 

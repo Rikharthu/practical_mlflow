@@ -100,7 +100,8 @@ print(CONDA_ENV)
 # %%
 MODEL_ARTIFACT_PATH = 'inference_pipeline_model'
 with mlflow.start_run(run_name="chapter07_wrapped_inference_pipeline") as dl_model_tracking_run:
-    finetuned_model_uri = 'runs:/1290f813d8e74a249c86eeab9f6ed24e/model'
+    run_id = "d31abc1287964a6599ce8a6ddc392f4e"
+    finetuned_model_uri = f'runs:/{run_id}/model'
     inference_pipeline_uri = f'runs:/{dl_model_tracking_run.info.run_id}/{MODEL_ARTIFACT_PATH}'
     mlflow.pyfunc.log_model(artifact_path=MODEL_ARTIFACT_PATH, 
                             conda_env=CONDA_ENV, 
@@ -109,6 +110,7 @@ with mlflow.start_run(run_name="chapter07_wrapped_inference_pipeline") as dl_mod
 
 
 # %%
+# Second "Great movie" prediction will output: "found cached result"
 input = {"text":["what a disappointing movie","Great movie", "Great movie", "很好看的电影"]}
 input_df = pd.DataFrame(input)
 input_df
