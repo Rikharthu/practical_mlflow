@@ -28,7 +28,7 @@ def task(foundation_model, fine_tuning_strategy, data_path):
 
     classifier_model = TextClassifier(backbone=foundation_model,
                                       num_classes=datamodule.num_classes, metrics=torchmetrics.F1(datamodule.num_classes))
-    trainer = flash.Trainer(max_epochs=3, gpus=torch.cuda.device_count())
+    trainer = flash.Trainer(max_epochs=5, gpus=torch.cuda.device_count())
 
     mlflow.pytorch.autolog()
     with mlflow.start_run(run_name="chapter07") as dl_model_tracking_run:
