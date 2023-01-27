@@ -7,6 +7,7 @@ edition = "2021"
 
 [dependencies]
 clap = { version = "4.1.4", features = ["derive"] }
+pickledb = "0.5.1"
 reqwest = { version = "0.11.14", features = ["blocking", "json"] }
 rust-s3 = { version = "0.32.3", features = ["no-verify-ssl", "blocking"] }
 serde = { version = "1.0.152", features = ["derive"] }

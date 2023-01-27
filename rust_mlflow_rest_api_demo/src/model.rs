@@ -1,4 +1,6 @@
+use std::path::Path;
 use std::str::FromStr;
+use pickledb::{PickleDb, PickleDbDumpPolicy, SerializationMethod};
 use serde::{Deserialize, Serialize};
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -37,4 +39,46 @@ pub fn find_latest_production_model(model_version: &[ModelVersion]) -> Option<Mo
             v1_version.cmp(&v2_version)
         })
         .cloned()
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct StoredModel {
+    pub name: String,
+    pub version: i32,
+    pub path: String,
+}
+
+pub struct ModelManager {
+    db: PickleDb,
+}
+
+impl ModelManager {
+    pub fn new(path: impl AsRef<Path>) -> Self {
+        let mut db = if path.as_ref().exists() {
+            PickleDb::load(
+                path,
+                PickleDbDumpPolicy::AutoDump,
+                SerializationMethod::Json,
+            ).unwrap()
+        } else {
+            PickleDb::new(
+                path,
+                PickleDbDumpPolicy::AutoDump,
+                SerializationMethod::Json,
+            )
+        };
+
+        Self {
+            db
+        }
+    }
+
+    pub fn get_stored_model(&self, name: impl AsRef<str>) -> Option<StoredModel> {
+        self.db.get(name.as_ref())
+    }
+
+    pub fn put_stored_model(&mut self, model: &StoredModel) {
+        self.db.set(model.name.as_str(), model).unwrap();
+        self.db.dump().unwrap();
+    }
 }
