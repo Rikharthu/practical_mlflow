@@ -1,0 +1,12 @@
+# List Registered models
+GET 192.168.0.96:80/api/2.0/mlflow/registered-models/search
+###
+
+# List Registered models
+GET 192.168.0.96:80/api/2.0/mlflow/registered-models/get-latest-versions?name=dl_finetuned_model
+###
+
+# Get download URI
+GET 192.168.0.96:80/api/2.0/mlflow/model-versions/get-download-uri?name=dl_finetuned_model&version=2
+###
+

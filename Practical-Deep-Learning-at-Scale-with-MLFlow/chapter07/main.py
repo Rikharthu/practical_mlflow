@@ -21,8 +21,8 @@ def run_pipeline(pipeline_steps):
 
     # Setup the mlflow experiment and AWS access for local execution environment
     # # if you run this project remotely, then comment out the following four lines
-    os.environ["MLFLOW_TRACKING_URI"] = "http://localhost"
-    os.environ["MLFLOW_S3_ENDPOINT_URL"] = "http://localhost:9000"
+    os.environ["MLFLOW_TRACKING_URI"] = "http://192.168.0.96"
+    os.environ["MLFLOW_S3_ENDPOINT_URL"] = "http://192.168.0.96:9000"
     os.environ["AWS_ACCESS_KEY_ID"] = "minio"
     os.environ["AWS_SECRET_ACCESS_KEY"] = "minio123"
 

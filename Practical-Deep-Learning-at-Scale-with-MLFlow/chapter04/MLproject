@@ -1,4 +1,4 @@
-name: dl_model_chapter04_3
+name: dl_model_chapter04
 conda_env: conda.yaml
 #python_env: files/config/python_env.yaml
 

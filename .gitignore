@@ -4,3 +4,6 @@
 /data/
 /demo/lightning_vit/data/
 /demo/lightning_vit/saved_models/
+
+*/data/*
+*/lightning_logs/*
