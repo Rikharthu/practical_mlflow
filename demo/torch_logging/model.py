@@ -1,57 +1,43 @@
-# %%
 import torch
 import torch.nn as nn
-import torch.optim as optim
-from torch.optim import lr_scheduler
-import torch.backends.cudnn as cudnn
-import numpy as np
 import torchvision
 from torchvision import datasets, models, transforms
-import matplotlib.pyplot as plt
 import time
 import os
 import copy
-
-# %%
-
-data_transforms = {
-    "train": transforms.Compose([
-        transforms.RandomResizedCrop(224),
-        transforms.RandomHorizontalFlip(),
-        transforms.ToTensor(),
-        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-    ]),
-    "val": transforms.Compose([
-        transforms.Resize(256),
-        transforms.CenterCrop(224),
-        transforms.ToTensor(),
-        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-    ])
-}
-
-data_dir = "data/hymenoptera_data"
-image_datasets = {x: datasets.ImageFolder(os.path.join(data_dir, x), data_transforms[x])
-                  for x in ["train", "val"]}
-dataloaders = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=4, shuffle=True, num_workers=4)
-               for x in ["train", "val"]}
-dataset_sizes = {x: len(image_datasets[x]) for x in ["train", "val"]}
-class_names = image_datasets["train"].classes
-
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-
-print(f"Dataset sizes: {dataset_sizes}")
-print(f"Class names: {class_names}")
-print(f"Device: {device}")
-
-# %%
-
-inputs, classes = next(iter(dataloaders["train"]))
-print(f"Input batch shape: {inputs.shape}")  # NCHW
+import mlflow
 
 
-# %%
+def create_dataloaders():
+    data_transforms = {
+        "train": transforms.Compose([
+            transforms.RandomResizedCrop(224),
+            transforms.RandomHorizontalFlip(),
+            transforms.ToTensor(),
+            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+        ]),
+        "val": transforms.Compose([
+            transforms.Resize(256),
+            transforms.CenterCrop(224),
+            transforms.ToTensor(),
+            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+        ])
+    }
+
+    data_dir = "data/hymenoptera_data"
+    image_datasets = {x: datasets.ImageFolder(os.path.join(data_dir, x), data_transforms[x])
+                      for x in ["train", "val"]}
+    dataloaders = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=4, shuffle=True, num_workers=0)
+                   for x in ["train", "val"]}
+    dataset_sizes = {x: len(image_datasets[x]) for x in ["train", "val"]}
+
+    return dataloaders, dataset_sizes
+
 
 def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
+    dataloaders, dataset_sizes = create_dataloaders()
+
+    # TODO log time metric at the end
     since = time.time()
 
     best_model_wts = copy.deepcopy(model.state_dict())
@@ -72,9 +58,6 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
             running_corrects = 0
 
             for inputs, labels in dataloaders[phase]:
-                inputs = inputs.to(device)
-                labels = labels.to(device)
-
                 optimizer.zero_grad()
 
                 # Forward
@@ -92,10 +75,14 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
                 running_corrects += torch.sum(preds == labels.data)
 
             if phase == "train":
+                mlflow.log_metric("learning_rate", scheduler.get_last_lr()[-1])
                 scheduler.step()
 
             epoch_loss = running_loss / dataset_sizes[phase]
             epoch_acc = running_corrects.double() / dataset_sizes[phase]
+
+            mlflow.log_metric(f"{phase}_epoch_loss", epoch_loss)
+            mlflow.log_metric(f"{phase}_epoch_acc", epoch_acc)
 
             print(f"{phase} loss: {epoch_loss:.4f}, acc: {epoch_acc:.4f}")
 
@@ -103,10 +90,13 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
             if phase == "val" and epoch_acc > best_acc:
                 best_acc = epoch_acc
                 best_model_wts = copy.deepcopy(model.state_dict())
+                mlflow.log_metric("best_acc", best_acc)
 
         print()
 
     time_elapsed = time.time() - since
+
+    mlflow.log_metric("time_elapsed", time_elapsed)
     print(f'Training complete in {time_elapsed // 60:.0f}m {time_elapsed % 60:.0f}s')
     print(f'Best val Acc: {best_acc:4f}')
 
@@ -115,32 +105,29 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
     return model
 
 
-# %%
-model_conv = torchvision.models.resnet18(pretrained=True)
-for param in model_conv.parameters():
-    param.requires_grad = False
+def create_ft_model():
+    """
+    Crate a model for fine-tuning
+    """
+    model_ft = models.resnet18(pretrained=True)
+    num_ftrs = model_ft.fc.in_features
+    # Here the size of each output sample is set to 2.
+    # Alternatively, it can be generalized to nn.Linear(num_ftrs, len(class_names)).
+    model_ft.fc = nn.Linear(num_ftrs, 2)
 
-# Parameters of newly constructed modules have requires_grad=True by default
-num_ftrs = model_conv.fc.in_features
-model_conv.fc = nn.Linear(num_ftrs, 2)
+    return model_ft
 
-model_conv = model_conv.to(device)
 
-criterion = nn.CrossEntropyLoss()
+def create_conv_model():
+    """
+    Create a model with pre-trained feature extractor
+    """
+    model_conv = torchvision.models.resnet18(pretrained=True)
+    for param in model_conv.parameters():
+        param.requires_grad = False
 
-# Observe that only parameters of final layer are being optimized as
-# opposed to before.
-optimizer_conv = optim.SGD(model_conv.fc.parameters(), lr=0.001, momentum=0.9)
+    # Parameters of newly constructed modules have requires_grad=True by default
+    num_ftrs = model_conv.fc.in_features
+    model_conv.fc = nn.Linear(num_ftrs, 2)
 
-# Decay LR by a factor of 0.1 every 7 epochs
-exp_lr_scheduler = lr_scheduler.StepLR(optimizer_conv, step_size=7, gamma=0.1)
-
-model_conv = train_model(
-    model_conv,
-    criterion,
-    optimizer_conv,
-    exp_lr_scheduler,
-    num_epochs=25
-)
-
-torch.save(model_conv.state_dict(), "model_conv.pt")
+    return model_conv

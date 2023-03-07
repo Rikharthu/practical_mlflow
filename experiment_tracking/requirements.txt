@@ -1,0 +1,12 @@
+tensorflow==2.11.0
+tensorflow-addons
+tabtransformertf
+tensorflow-datasets
+mlflow==2.1.1
+catboost
+scikit-learn
+matplotlib
+seaborn
+pandas
+jupyter
+boto3

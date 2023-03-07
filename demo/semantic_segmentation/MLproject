@@ -1,0 +1,28 @@
+name: "semantic_segmentation"
+
+conda_env: conda.yaml
+
+# mlflow run --build-image .
+# docker run --rm -it semantic_segmentation:<tag> /bin/bash
+#docker_env:
+#  image: python:3.10
+
+entry_points:
+  main:
+    parameters:
+      pipeline_steps:
+        description: Comma-separated list of dl pipeline steps to execute
+        type: str
+        default: all
+    command: "python main.py --steps {pipeline_steps}"
+
+  train_model:
+    command: "python pipeline/train_model.py"
+
+  download_model:
+    parameters:
+      run_id:
+        type: str
+        description: "Id of the run from which model shall be downloaded"
+    command: "python pipeline/download_model.py --run_id {run_id}"
+

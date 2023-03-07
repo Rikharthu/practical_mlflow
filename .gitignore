@@ -1,2 +1,6 @@
 /mlruns/*
 */mlruns/*
+/saved_models/
+/data/
+/demo/lightning_vit/data/
+/demo/lightning_vit/saved_models/

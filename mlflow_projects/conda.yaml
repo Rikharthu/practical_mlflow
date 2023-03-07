@@ -1,0 +1,16 @@
+name: fraud
+channels:
+  - conda-forge
+dependencies:
+  - python=3.9
+  - pip
+  - pip:
+      - click
+      - mlflow==2.1.1
+      - kaggle
+      - polars
+      - catboost
+      - optuna
+      - pandas
+      - sklearn
+      - boto3

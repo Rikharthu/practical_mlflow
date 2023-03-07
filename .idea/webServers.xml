@@ -3,7 +3,7 @@
   <component name="WebServers">
     <option name="servers">
       <webServer id="becd8c9e-f82a-498f-bcf9-4783a7019399" name="ThinkCentre">
-        <fileTransfer accessType="SFTP" host="192.168.0.96" port="22" sshConfigId="19139a32-c426-48ed-a26c-afcf9fcb3015" sshConfig="richard@192.168.0.96:22 password">
+        <fileTransfer accessType="SFTP" host="192.168.0.97" port="22" sshConfigId="19139a32-c426-48ed-a26c-afcf9fcb3015" sshConfig="richard@192.168.0.97:22 password">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" isUseRsync="true" />
           </advancedOptions>

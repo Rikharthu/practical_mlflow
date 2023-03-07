@@ -1,0 +1,10 @@
+name: fraud_detection
+
+conda_env: conda.yaml
+
+entry_points:
+  main:
+    parameters:
+      dset: { type: str, default: sgpjesus/bank-account-fraud-dataset-neurips-2022 }
+      n_trials: { type: int, default: 10 }
+    command: "python main.py {dset} {n_trials}"
