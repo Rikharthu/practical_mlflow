@@ -158,13 +158,45 @@ python pipeline/hpo_finetuning_model.py
 python pipeline/hpo_finetuning_model_optuna.py
 ```
 
-TODO: MLflow has multiple integrations.
-
 ## Integrations & Other Capabilities
 
 * Hyperparameter tuning: OpTuna and others
 * Serving
-* Sample MLops flows with Airflow, etc (that video from Databricks on X-Rays)
+    * Ray
+    * BentoML
+    * Others..
+    * MLflow
+      itself: [Serving an MLflow Model form Model Registry](https://mlflow.org/docs/latest/registry.html?highlight=serving#serving-an-mlflow-model-from-model-registry)
+* Sample MLops workflows
+    * [Using Airflow with Tensorflow and MLflow](https://youtu.be/4tRTfwqcuWU?t=691)
+        * K8s
+    * [Airflow + MLflow stack](https://mymlops.com/examples/airflow-mlflow)
+        * Git with DVC
+        * Airflow
+        * MLflow
+        * BentoML
+        * Prometheus & Grafana
+* Integrates with most machine learning & serving frameworks
+    * Custom models can be easily integrated as well by implementing a couple of lifecycle methods (similarly to PyTorch
+      Lightning)
+        *
+      Example: [multistep_inference_model.py](../Practical-Deep-Learning-at-Scale-with-MLFlow/chapter07/notebooks/multistep_inference_model.py)
+* Quite popular
+    * [MLflow and Azure Machine Learning](https://learn.microsoft.com/en-us/azure/machine-learning/concept-mlflow)
+
+## TMP Use-cases
+
+* Model registry, version and environment management
+    * Download & update models
+        * Sample naive code:  [rust_mlflow_rest_api_demo](../rust_mlflow_rest_api_demo)
+            * Download latest up-to-date model from a specified environment
+* Track & compare experiments, perform HPO
+    * There are tutorials on integrating MLflow into Ultralytics YOLO models
+        * https://medium.com/codex/setting-up-mlflow-for-ultralytics-yolov5-1380b5f8cac5
+        * https://techblog.sms-digital.com/integrating-mlflow-into-ultralytics/yolov5-1
+        * https://github.com/ultralytics/ultralytics/issues/199
+* Build & launch machine learning pipelines
+    * Automatically builds Docker container from training code, pushes to registry and launches Kubernetes Job.
 
 ## Notes
 
@@ -251,13 +283,3 @@ TODO: MLflow has multiple integrations.
 
 * Loads custom model parameters from MLflow (non-serializable model URI) and uses it to initialize custom model
   in `load_context()`
-
-## Resources
-
-* [Create Reusable ML Modules with MLflow Projects & Docker](https://towardsdatascience.com/create-reusable-ml-modules-with-mlflow-projects-docker-33cd722c93c4)
-* [Airflow + MLflow stack](https://mymlops.com/examples/airflow-mlflow)
-    * Git with DVC
-    * Airflow
-    * MLflow
-    * BentoML
-    * Prometheus & Grafana
